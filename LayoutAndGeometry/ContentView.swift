@@ -20,10 +20,11 @@ struct ContentView: View {
                         Text("Row #\(index)")
                             .font(.title)
                             .frame(maxWidth: .infinity)
-                            .background(colors[index % 7])
+                            .background(backgroundForView(geo: geo, fullView: fullView))
                             .rotation3DEffect(.degrees(geo.frame(in: .global).minY - fullView.size.height / 2) / 5, axis: (x: 0, y: 1, z: 0))
                             .opacity(opacityForView(geo: geo, fullView: fullView))
-                            .scaleEffect(x: scaleForView(geo: geo, fullView: fullView))
+                            .scaleEffect(scaleForView(geo: geo, fullView: fullView))
+                           
                     }
                     .frame(height: 40)
                 }
@@ -45,18 +46,29 @@ struct ContentView: View {
     
     func scaleForView(geo: GeometryProxy, fullView: GeometryProxy) -> Double {
         let height = geo.frame(in: .global).height
-        
+
         let fullMinY = fullView.frame(in: .global).minY
-        
+
         let maxY = geo.frame(in: .global).maxY
-        
+
         let fullMaxY = fullView.frame(in: .global).maxY
-        
+
         let diff = fullMaxY - fullMinY
-        
+
         let increment = 0.5 / (diff / maxY)
-            return 0.5 + increment
         
+        return 0.5 + increment
+        
+    }
+    
+    func backgroundForView(geo: GeometryProxy, fullView: GeometryProxy) -> Color {
+        
+        let minY = geo.frame(in: .global).minY
+        let fullViewHeight = fullView.size.height
+        
+        let hue = Double(minY / fullViewHeight)
+        
+        return Color(hue: hue, saturation: 0.8, brightness: 0.8)
     }
 }
 
