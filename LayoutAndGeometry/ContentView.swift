@@ -23,6 +23,7 @@ struct ContentView: View {
                             .background(colors[index % 7])
                             .rotation3DEffect(.degrees(geo.frame(in: .global).minY - fullView.size.height / 2) / 5, axis: (x: 0, y: 1, z: 0))
                             .opacity(opacityForView(geo: geo, fullView: fullView))
+                            .scaleEffect(x: scaleForView(geo: geo, fullView: fullView))
                     }
                     .frame(height: 40)
                 }
@@ -40,6 +41,22 @@ struct ContentView: View {
         } else {
             return 1.0
         }
+    }
+    
+    func scaleForView(geo: GeometryProxy, fullView: GeometryProxy) -> Double {
+        let height = geo.frame(in: .global).height
+        
+        let fullMinY = fullView.frame(in: .global).minY
+        
+        let maxY = geo.frame(in: .global).maxY
+        
+        let fullMaxY = fullView.frame(in: .global).maxY
+        
+        let diff = fullMaxY - fullMinY
+        
+        let increment = 0.5 / (diff / maxY)
+            return 0.5 + increment
+        
     }
 }
 
